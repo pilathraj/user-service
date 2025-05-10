@@ -1,4 +1,4 @@
-# Library User Management Service
+# User Management Service
 This project is a user management service for a library system. It provides APIs for user registration, authentication, profile management, role-based access control, and user preferences management.
 
 ---
