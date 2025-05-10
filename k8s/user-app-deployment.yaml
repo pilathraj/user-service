@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: user-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: user-service
+  template:
+    metadata:
+      labels:
+        app: user-service
+    spec:
+      containers:
+      - name: user-service
+        image: user-service:latest
+        ports:
+        - containerPort: 8084
+        env:
+        - name: POSTGRES_DATABASE_DSN
+          value: host=postgres-service user=root password=postgres dbname=users_db port=5432 sslmode=disable TimeZone=Asia/Kolkata
+        - name: JWT_SECRET_KEY
+          value: 937b836ba9aaee6b24f27db54e99e39cfe9e361300a4166786d816c1b82da4fd
+       
