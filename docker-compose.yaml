@@ -1,0 +1,49 @@
+version: '3.8'
+
+networks:
+  kafka-network:
+    driver: bridge
+
+services:
+#   postgres-service:
+#     image: 'postgres:latest'
+#     container_name: postgres-service
+#     hostname: postgres-service
+#     networks:
+#       - kafka-network
+#     ports:
+#       - 5432:5432/tcp
+#     environment:
+#       - POSTGRES_USER=root
+#       - POSTGRES_PASSWORD=postgres
+#       - POSTGRES_DB=postgres
+#     volumes:
+#       - postgres_data:/var/lib/postgresql/data:rw
+#     healthcheck:
+#       test: ["CMD-SHELL", "pg_isready -U root -d postgres"]
+#       interval: 30s
+#       timeout: 10s
+#       retries: 3
+#     restart: unless-stopped
+
+  user-service:
+    image: user-service:latest
+    build:
+      context: .
+    container_name: user-service
+    hostname: user-service
+    ports:
+      - 8084:8084/tcp
+    environment:
+      - POSTGRES_DATABASE_DSN=host=postgres-service user=root password=postgres dbname=users_db port=5432 sslmode=disable TimeZone=Asia/Kolkata
+      - JWT_SECRET_KEY=937b836ba9aaee6b24f27db54e99e39cfe9e361300a4166786d816c1b82da4fd
+    # depends_on:
+    #   - postgres-service
+        
+    networks:
+      - kafka-network
+    restart: unless-stopped
+
+volumes:
+  postgres_data:
+    external: true
